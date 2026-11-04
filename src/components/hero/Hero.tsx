@@ -221,14 +221,18 @@ export function Hero() {
               {/* Clean, Premium Portrait Frame with Subtle Blue Gradient Borders */}
               <div className="relative rounded-[2rem] p-3 bg-white/90 border border-blue-100/90 shadow-[0_20px_50px_rgba(37,99,235,0.14)] backdrop-blur-md transition-all duration-300 hover:shadow-[0_25px_60px_rgba(37,99,235,0.2)] hover:border-blue-300/80">
                 {/* Image Viewport Container */}
-                <div className="relative w-full h-[400px] sm:h-[450px] rounded-[1.5rem] overflow-hidden bg-slate-100 flex items-center justify-center">
+                <div
+                  className="relative w-full aspect-[3/4] rounded-[1.5rem] overflow-hidden bg-slate-100 flex items-center justify-center"
+                  style={{ aspectRatio: '3 / 4' }}
+                >
                   {!imgError ? (
                     <Image
                       src={PERSONAL_INFO.photoUrl}
                       alt="Anushka Potdar - Aspiring AI/ML Engineer"
                       fill
                       priority
-                      className="object-cover object-top sm:object-center transition-transform duration-700 ease-out hover:scale-105"
+                      className="object-cover object-center transition-transform duration-700 ease-out hover:scale-105"
+                      style={{ objectFit: 'cover', objectPosition: 'center' }}
                       onError={() => setImgError(true)}
                       sizes="(max-width: 640px) 340px, (max-width: 1024px) 380px, 400px"
                     />

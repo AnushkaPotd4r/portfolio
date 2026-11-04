@@ -102,12 +102,16 @@ export function About() {
             className="lg:col-span-5"
           >
             <div className="relative rounded-3xl p-3 bg-white border border-blue-100/90 shadow-[0_16px_40px_rgba(37,99,235,0.08)] group">
-              <div className="relative h-72 sm:h-80 w-full rounded-2xl overflow-hidden bg-slate-100">
+              <div
+                className="relative h-72 sm:h-80 w-full rounded-2xl overflow-hidden bg-slate-100"
+                style={{ minHeight: '280px' }}
+              >
                 <Image
                   src={PERSONAL_INFO.photoUrl}
                   alt="Anushka Potdar"
                   fill
-                  className="object-cover object-top sm:object-center transition-transform duration-500 group-hover:scale-105"
+                  className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                  style={{ objectFit: 'cover', objectPosition: 'center' }}
                   sizes="(max-width: 768px) 100vw, 400px"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#14213D]/80 via-transparent to-transparent pointer-events-none" />
