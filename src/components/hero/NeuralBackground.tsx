@@ -27,15 +27,15 @@ export function NeuralBackground() {
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Palette: Purple, Cyan, Deep Electric Blue
+    // Premium Electric Blue & Sky palette for pure white backdrop
     const colors = [
-      'rgba(168, 85, 247, 0.7)', // Purple
-      'rgba(56, 189, 248, 0.7)', // Cyan
-      'rgba(129, 140, 248, 0.6)', // Indigo
+      'rgba(37, 99, 235, 0.65)',   // Electric Blue (#2563EB)
+      'rgba(96, 165, 250, 0.70)',  // Light Blue (#60A5FA)
+      'rgba(56, 189, 248, 0.60)',  // Sky Blue (#38BDF8)
+      'rgba(20, 33, 61, 0.40)',    // Deep Navy accent
     ];
 
-    // Responsive node count: fewer on mobile
-    const particleCount = width < 768 ? 32 : 65;
+    const particleCount = width < 768 ? 28 : 55;
     const particles: Particle[] = [];
 
     for (let i = 0; i < particleCount; i++) {
@@ -43,8 +43,8 @@ export function NeuralBackground() {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.45,
-        vy: (Math.random() - 0.5) * 0.45,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
         radius,
         baseRadius: radius,
         color: colors[Math.floor(Math.random() * colors.length)],
@@ -78,27 +78,27 @@ export function NeuralBackground() {
     window.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseleave', handleMouseLeave);
 
-    const maxDistance = width < 768 ? 95 : 135;
+    const maxDistance = width < 768 ? 100 : 130;
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Draw subtle ambient glow gradients
+      // Soft ambient blue aura in the top right / hero backdrop
       const gradient = ctx.createRadialGradient(
-        width * 0.5,
-        height * 0.4,
-        50,
-        width * 0.5,
-        height * 0.4,
-        width * 0.6
+        width * 0.7,
+        height * 0.35,
+        40,
+        width * 0.7,
+        height * 0.35,
+        width * 0.55
       );
-      gradient.addColorStop(0, 'rgba(88, 28, 135, 0.08)');
-      gradient.addColorStop(0.5, 'rgba(14, 116, 144, 0.04)');
-      gradient.addColorStop(1, 'rgba(3, 7, 18, 0)');
+      gradient.addColorStop(0, 'rgba(219, 234, 254, 0.4)');
+      gradient.addColorStop(0.5, 'rgba(239, 246, 255, 0.25)');
+      gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, width, height);
 
-      // Update and draw particles
+      // Update and draw nodes & connecting lines
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
 
@@ -106,28 +106,26 @@ export function NeuralBackground() {
           p.x += p.vx;
           p.y += p.vy;
 
-          // Bounce off edges gently
           if (p.x < 0 || p.x > width) p.vx *= -1;
           if (p.y < 0 || p.y > height) p.vy *= -1;
 
-          // Mouse proximity effect
           const dxMouse = mouse.x - p.x;
           const dyMouse = mouse.y - p.y;
           const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
           if (distMouse < mouse.radius) {
-            p.radius = p.baseRadius + (1 - distMouse / mouse.radius) * 2;
+            p.radius = p.baseRadius + (1 - distMouse / mouse.radius) * 1.8;
           } else {
             p.radius = p.baseRadius;
           }
         }
 
-        // Draw particle node
+        // Draw node
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fillStyle = p.color;
         ctx.fill();
 
-        // Connect nearby particles
+        // Connect nearby nodes
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dx = p.x - p2.x;
@@ -135,26 +133,26 @@ export function NeuralBackground() {
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist < maxDistance) {
-            const alpha = (1 - dist / maxDistance) * 0.28;
+            const alpha = (1 - dist / maxDistance) * 0.22;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(147, 197, 253, ${alpha})`;
-            ctx.lineWidth = 0.8;
+            ctx.strokeStyle = `rgba(37, 99, 235, ${alpha})`;
+            ctx.lineWidth = 0.75;
             ctx.stroke();
           }
         }
 
-        // Connect to mouse if close
+        // Connect to mouse pointer
         const dxMouse = mouse.x - p.x;
         const dyMouse = mouse.y - p.y;
         const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
         if (distMouse < mouse.radius) {
-          const alpha = (1 - distMouse / mouse.radius) * 0.45;
+          const alpha = (1 - distMouse / mouse.radius) * 0.38;
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(mouse.x, mouse.y);
-          ctx.strokeStyle = `rgba(168, 85, 247, ${alpha})`;
+          ctx.strokeStyle = `rgba(37, 99, 235, ${alpha})`;
           ctx.lineWidth = 1;
           ctx.stroke();
         }
@@ -178,7 +176,7 @@ export function NeuralBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none z-0 opacity-80"
+      className="absolute inset-0 w-full h-full pointer-events-none z-0"
       aria-hidden="true"
     />
   );
